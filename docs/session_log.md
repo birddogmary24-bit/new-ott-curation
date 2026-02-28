@@ -5,6 +5,38 @@
 
 ---
 
+## SESSION-003 · 2026-02-28
+
+### 작업 내용
+**Phase 1 진행: Flutter 화면 구현 (플레이스홀더 → 실제 화면 교체)**
+
+**신규 Flutter 피처 화면 (6개 피처)**
+- `onboarding/`: 장르 선택(OnboardingGenreScreen), OTT 선택(OnboardingOttScreen), 초기 평점(OnboardingRateScreen) + 위젯(genre_chip, ott_selection_card, rating_content_tile, onboarding_progress_bar) + OnboardingProvider + 장르 상수
+- `search/`: SearchScreen (검색바 + 결과 목록)
+- `content_detail/`: ContentDetailScreen (backdrop_header, ott_availability_section, content_info_section, review_snippet) + ContentDetailProvider
+- `community/`: CommunityScreen, CollectionDetailScreen + 위젯(review_card, collection_card) + Provider 2개 + 모델(review, collection_summary, collection_detail)
+- `profile/`: ProfileScreen, ProfileEditScreen, MyRatingsScreen + 위젯(profile_header, taste_radar_chart, stats_row) + ProfileProvider + TasteProfile 엔티티/모델
+- `settings/`: SettingsScreen
+
+**공유 위젯**
+- `flutter_app/lib/core/widgets/star_rating_bar.dart`: 0.5점 단위 별점 입력 위젯
+
+**수정된 파일**
+- `routing/app_router.dart`: 플레이스홀더 → 실제 화면 교체 (onboarding 3개, search, content_detail, community, collection_detail, profile 3개, settings), ContentDetailScreen 경로 파라미터 전달
+- `core/network/api_client.dart`: `apiClientProvider` (Riverpod Provider<Dio>) 추가
+- `features/home/data/datasources/content_remote_datasource.dart`: `getContentDetailFull()`, `rateContent()` 메서드 추가
+- `core/errors/failures.dart`: `NetworkFailure`, `ServerFailure` 생성자 optional parameter 방식으로 변경
+
+### 의도
+SESSION-001에서 만든 라우터의 플레이스홀더 화면들을 실제 UI로 교체하여 앱의 전체 화면 흐름을 완성. Clean Architecture (data→domain→presentation) 레이어 구조 준수.
+
+### 영향도
+- **직접 영향**: `flutter_app/lib/features/` 하위 6개 피처 신규 + `core/` 2개 수정
+- **라우팅 완성도**: _PlaceholderScreen 대부분 제거 (내 컬렉션 1개만 남음)
+- **API 연결**: ContentDetailProvider, ProfileProvider, CommunityProvider가 apiClientProvider 의존
+
+---
+
 ## SESSION-002 · 2026-02-28
 
 ### 작업 내용
