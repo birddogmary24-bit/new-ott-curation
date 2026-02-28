@@ -5,9 +5,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 // 실제 화면 imports
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/home/presentation/screens/home_screen.dart';
+import '../features/search/presentation/screens/search_screen.dart';
 import '../features/curation/presentation/screens/curation_chat_screen.dart';
 import '../features/ai_content_hall/presentation/screens/ai_hall_screen.dart';
 import '../features/ai_content_hall/presentation/screens/ai_hall_upload_screen.dart';
+import '../features/onboarding/presentation/screens/onboarding_genre_screen.dart';
+import '../features/onboarding/presentation/screens/onboarding_ott_screen.dart';
+import '../features/onboarding/presentation/screens/onboarding_rate_screen.dart';
+import '../features/content_detail/presentation/screens/content_detail_screen.dart';
+import '../features/community/presentation/screens/community_screen.dart';
+import '../features/community/presentation/screens/collection_detail_screen.dart';
+import '../features/profile/presentation/screens/profile_screen.dart';
+import '../features/profile/presentation/screens/profile_edit_screen.dart';
+import '../features/profile/presentation/screens/my_ratings_screen.dart';
+import '../features/settings/presentation/screens/settings_screen.dart';
 
 /// 라우트 경로 상수
 class Routes {
@@ -64,15 +75,15 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.onboardingGenre,
-      builder: (_, __) => const _PlaceholderScreen('온보딩: 장르 선택'),
+      builder: (_, __) => const OnboardingGenreScreen(),
     ),
     GoRoute(
       path: Routes.onboardingOtt,
-      builder: (_, __) => const _PlaceholderScreen('온보딩: OTT 선택'),
+      builder: (_, __) => const OnboardingOttScreen(),
     ),
     GoRoute(
       path: Routes.onboardingRate,
-      builder: (_, __) => const _PlaceholderScreen('온보딩: 초기 평점'),
+      builder: (_, __) => const OnboardingRateScreen(),
     ),
 
     // ── 메인 앱 (하단 탭 Shell) ──
@@ -92,7 +103,7 @@ final appRouter = GoRouter(
         StatefulShellBranch(routes: [
           GoRoute(
             path: Routes.search,
-            builder: (_, __) => const _PlaceholderScreen('검색'),
+            builder: (_, __) => const SearchScreen(),
           ),
         ]),
         // 탭 3: AI 콘텐츠 관
@@ -105,11 +116,6 @@ final appRouter = GoRouter(
                 path: 'upload',
                 builder: (_, __) => const AiHallUploadScreen(),
               ),
-              GoRoute(
-                path: ':id',
-                builder: (_, state) =>
-                    _PlaceholderScreen('AI 콘텐츠: ${state.pathParameters['id']}'),
-              ),
             ],
           ),
         ]),
@@ -117,17 +123,17 @@ final appRouter = GoRouter(
         StatefulShellBranch(routes: [
           GoRoute(
             path: Routes.community,
-            builder: (_, __) => const _PlaceholderScreen('커뮤니티'),
+            builder: (_, __) => const CommunityScreen(),
           ),
         ]),
         // 탭 5: 프로필
         StatefulShellBranch(routes: [
           GoRoute(
             path: Routes.profile,
-            builder: (_, __) => const _PlaceholderScreen('프로필'),
+            builder: (_, __) => const ProfileScreen(),
             routes: [
-              GoRoute(path: 'edit',        builder: (_, __) => const _PlaceholderScreen('프로필 편집')),
-              GoRoute(path: 'ratings',     builder: (_, __) => const _PlaceholderScreen('내 평점')),
+              GoRoute(path: 'edit',    builder: (_, __) => const ProfileEditScreen()),
+              GoRoute(path: 'ratings', builder: (_, __) => const MyRatingsScreen()),
               GoRoute(path: 'collections', builder: (_, __) => const _PlaceholderScreen('내 컬렉션')),
             ],
           ),
@@ -138,13 +144,15 @@ final appRouter = GoRouter(
     // ── Shell 밖 라우트 ──
     GoRoute(
       path: '/content/:id',
-      builder: (_, state) =>
-          _PlaceholderScreen('콘텐츠 상세: ${state.pathParameters['id']}'),
+      builder: (_, state) => ContentDetailScreen(
+        contentId: state.pathParameters['id']!,
+      ),
     ),
     GoRoute(
       path: '/collection/:id',
-      builder: (_, state) =>
-          _PlaceholderScreen('컬렉션: ${state.pathParameters['id']}'),
+      builder: (_, state) => CollectionDetailScreen(
+        collectionId: state.pathParameters['id']!,
+      ),
     ),
     GoRoute(
       path: Routes.curationChat,
@@ -152,7 +160,7 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.settings,
-      builder: (_, __) => const _PlaceholderScreen('설정'),
+      builder: (_, __) => const SettingsScreen(),
     ),
   ],
 );
@@ -197,7 +205,7 @@ class _SplashScreen extends StatelessWidget {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 플레이스홀더 (아직 미구현 화면)
+// 플레이스홀더 (내 컬렉션만 남음)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 class _PlaceholderScreen extends StatelessWidget {
   final String title;
