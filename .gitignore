@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+.env
+.env.local
+.env.*.local
+build/
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+*.lock
+!pubspec.lock

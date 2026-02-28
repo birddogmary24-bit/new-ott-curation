@@ -1,0 +1,122 @@
+name: ott_curation
+description: "OTT 콘텐츠 큐레이션 앱 - AI 맞춤 추천 + AI 콘텐츠 관"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # State Management
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Navigation
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  go_router: ^14.8.1
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Firebase (GCP 통합)
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
+  firebase_messaging: ^15.2.4
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Social Login
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  sign_in_with_apple: ^6.1.4
+  google_sign_in: ^6.2.2
+  kakao_flutter_sdk_user: ^1.9.4   # 카카오 로그인
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # HTTP
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  dio: ^5.8.0+1
+  retrofit: ^4.4.1
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Data / Model
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Local Storage
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.4
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Media
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  cached_network_image: ^3.4.1
+  video_player: ^2.9.3
+  chewie: ^1.10.0
+  image_picker: ^1.1.2
+  file_picker: ^8.3.7
+  video_compress: ^3.1.3
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # UI
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  shimmer: ^3.0.0
+  flutter_animate: ^4.5.2
+  fl_chart: ^0.70.2           # 취향 레이더 차트
+  infinite_scroll_pagination: ^4.1.0
+  share_plus: ^10.1.4
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Utility
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  uuid: ^4.5.1
+  intl: ^0.20.2
+  path_provider: ^2.1.5
+  url_launcher: ^6.3.1
+  package_info_plus: ^8.3.0
+  connectivity_plus: ^6.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Code generation
+  build_runner: ^2.4.14
+  freezed: ^2.5.8
+  json_serializable: ^6.9.3
+  riverpod_generator: ^2.6.4
+  retrofit_generator: ^8.2.2
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Assets
+  assets:
+    - assets/images/ott_logos/
+    - assets/images/onboarding/
+    - assets/images/placeholders/
+    - assets/lottie/
+    - assets/l10n/
+
+  # Fonts (Pretendard - 한국어 최적화)
+  fonts:
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/pretendard/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/pretendard/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/pretendard/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/pretendard/Pretendard-Bold.otf
+          weight: 700

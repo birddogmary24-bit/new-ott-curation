@@ -1,0 +1,35 @@
+{
+  "name": "ott-curation-api",
+  "version": "1.0.0",
+  "description": "OTT 큐레이션 앱 Cloud Run API 서버",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "lint": "eslint src/**/*.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@google-cloud/secret-manager": "^5.6.0",
+    "@google-cloud/storage": "^7.15.0",
+    "axios": "^1.8.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.3",
+    "pgvector": "^0.2.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.13.4",
+    "@types/pg": "^8.11.11",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.3"
+  }
+}
