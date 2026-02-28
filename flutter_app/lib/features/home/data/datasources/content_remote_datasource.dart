@@ -73,6 +73,40 @@ class ContentRemoteDataSource {
     }
   }
 
+  /// 콘텐츠 상세 (유사 콘텐츠 + 내 평점 포함)
+  Future<({ContentModel content, List<ContentModel> similar, double? userRating})>
+      getContentDetailFull(String contentId) async {
+    try {
+      final response = await _dio.get(
+        '${AppConfig.contentsUrl}/$contentId',
+        queryParameters: {'include': 'similar,user_rating'},
+      );
+      final data = response.data['data'] as Map<String, dynamic>;
+      final content = ContentModel.fromJson(data['content'] as Map<String, dynamic>? ?? data);
+      final similarJson = data['similar'] as List<dynamic>? ?? [];
+      final similar = similarJson
+          .whereType<Map<String, dynamic>>()
+          .map(ContentModel.fromJson)
+          .toList();
+      final userRating = (data['user_rating'] as num?)?.toDouble();
+      return (content: content, similar: similar, userRating: userRating);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
+  /// 평점 등록/수정
+  Future<void> rateContent(String contentId, double rating) async {
+    try {
+      await _dio.post('${AppConfig.apiBaseUrl}/api/users/ratings', data: {
+        'content_id': contentId,
+        'rating': rating,
+      });
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
   /// 검색
   Future<List<ContentModel>> searchContents({
     required String query,

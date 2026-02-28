@@ -6,13 +6,13 @@ sealed class Failure {
 
 /// 네트워크 연결 없음
 final class NetworkFailure extends Failure {
-  const NetworkFailure() : super('인터넷 연결을 확인해주세요.');
+  const NetworkFailure([String message = '인터넷 연결을 확인해주세요.']) : super(message);
 }
 
 /// API 서버 오류
 final class ServerFailure extends Failure {
   final int? statusCode;
-  const ServerFailure({String message = '서버 오류가 발생했습니다.', this.statusCode})
+  const ServerFailure([String message = '서버 오류가 발생했습니다.', this.statusCode])
       : super(message);
 }
 

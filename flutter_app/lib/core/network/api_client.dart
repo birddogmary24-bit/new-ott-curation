@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_config.dart';
+
+/// Dio 인스턴스 프로바이더 (앱 전역)
+final apiClientProvider = Provider<Dio>((ref) => createApiClient());
 
 /// Cloud Run API 클라이언트
 /// Firebase Auth 토큰을 자동으로 Authorization 헤더에 추가
