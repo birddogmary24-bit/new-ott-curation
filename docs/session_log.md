@@ -5,6 +5,23 @@
 
 ---
 
+## SESSION-004 · 2026-03-01
+
+### 작업 내용
+- `.github/workflows/deploy.yml` — GitHub Actions CI/CD 파이프라인 신규 생성
+- `scripts/run-migrations.sh` — Cloud SQL Auth Proxy 기반 마이그레이션 자동 실행 스크립트 신규 생성
+
+### 의도
+소스 코드 변경 시 자동으로 빌드·배포되는 파이프라인이 없어, PR이 main으로 머지될 때마다 수동 배포가 필요했음.
+GitHub Actions를 도입하여 서버 배포(Cloud Run), DB 마이그레이션, Flutter 앱 빌드를 완전 자동화.
+
+### 영향도
+- **직접 영향**: `.github/workflows/deploy.yml`, `scripts/run-migrations.sh`
+- **연관 영향**: main 브랜치에 push될 때마다 5개 Job이 자동 실행됨
+- **Phase 진행상황**: Phase 0 인프라 자동화 완성 (CI/CD 추가)
+
+---
+
 ## SESSION-003 · 2026-02-28
 
 ### 작업 내용

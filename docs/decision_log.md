@@ -5,6 +5,21 @@
 
 ---
 
+## D-002. CI/CD 도구: GitHub Actions 선택
+
+- **날짜**: 2026-03
+- **배경**: 소스 변경 시 자동 배포 파이프라인 필요. 기존에는 `setup-gcp.sh` 수동 실행만 존재.
+- **검토한 선택지**
+  - **GitHub Actions**: 소스 레포와 동일 위치, 무료 티어 충분, YAML 기반으로 복잡한 Job 의존성 표현 가능
+  - Cloud Build (GCP): GCP 네이티브이나, 소스가 GitHub에 있어 트리거 연동 복잡
+  - Jenkins: 자체 서버 필요, 운영 오버헤드 큼
+- **결정**: GitHub Actions (`.github/workflows/deploy.yml`)
+- **근거**: 소스가 GitHub에 있고 팀 규모가 작아 별도 CI 서버 없이 바로 사용 가능. GCP 공식 Actions(`google-github-actions/auth`) 지원으로 Cloud Run 배포 연동 간단.
+- **트레이드오프**: GCP 외부에서 빌드되므로 Private 네트워크 자원 접근 시 Cloud SQL Auth Proxy 필요
+- **영향**: `.github/workflows/` 디렉토리, `scripts/run-migrations.sh`
+
+---
+
 ## D-001. 앱 프레임워크: Flutter 선택
 
 - **날짜**: 2026-02 (초기 설계)
