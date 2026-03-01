@@ -198,7 +198,7 @@ store_secret() {
   fi
 }
 
-store_secret "anthropic-api-key" "$ANTHROPIC_API_KEY"
+store_secret "gemini-api-key" "$GEMINI_API_KEY"
 store_secret "voyage-api-key" "$VOYAGE_API_KEY"
 store_secret "tmdb-api-key" "$TMDB_API_KEY"
 store_secret "db-password" "$DB_PASSWORD"

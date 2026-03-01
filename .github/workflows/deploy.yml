@@ -79,7 +79,7 @@ jobs:
             --platform managed \
             --service-account ott-curation-sa@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com \
             --add-cloudsql-instances ${{ env.GCP_PROJECT_ID }}:${{ env.GCP_REGION }}:ott-curation-db \
-            --set-secrets="DB_PASSWORD=db-password:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,VOYAGE_API_KEY=voyage-api-key:latest,TMDB_API_KEY=tmdb-api-key:latest,API_SECRET_KEY=api-secret-key:latest" \
+            --set-secrets="DB_PASSWORD=db-password:latest,GEMINI_API_KEY=gemini-api-key:latest,VOYAGE_API_KEY=voyage-api-key:latest,TMDB_API_KEY=tmdb-api-key:latest,API_SECRET_KEY=api-secret-key:latest" \
             --set-env-vars="NODE_ENV=production,PORT=8080,GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_REGION=${{ env.GCP_REGION }},DB_NAME=${{ secrets.DB_NAME }},DB_USER=${{ secrets.DB_USER }},CLOUD_SQL_CONNECTION_NAME=${{ secrets.CLOUD_SQL_CONNECTION_NAME }},GCS_VIDEO_BUCKET=ott-curation-ai-videos,GCS_THUMBNAIL_BUCKET=ott-curation-thumbnails,GCS_AVATAR_BUCKET=ott-curation-avatars,FIREBASE_PROJECT_ID=${{ env.GCP_PROJECT_ID }}" \
             --min-instances 0 \
             --max-instances 10 \

@@ -1,8 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { query, queryOne } from '../db/client';
 import { generateEmbedding } from './embedding.service';
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '');
+const gemini = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 interface CurationResult {
   contents: ContentSummary[];
@@ -28,13 +29,8 @@ export async function processNaturalLanguageCuration(
   userId: string | undefined,
   platformIds: string[]
 ): Promise<CurationResult> {
-  // 1. Claude로 프롬프트 분석
-  const intentResponse = await anthropic.messages.create({
-    model: 'claude-haiku-4-5',
-    max_tokens: 500,
-    messages: [{
-      role: 'user',
-      content: `다음 한국어 콘텐츠 추천 요청을 분석해서 JSON으로 반환해주세요.
+  // 1. Gemini로 프롬프트 분석
+  const intentResult = await gemini.generateContent(`다음 한국어 콘텐츠 추천 요청을 분석해서 JSON으로 반환해주세요.
 요청: "${prompt}"
 
 반환 형식:
@@ -44,9 +40,8 @@ export async function processNaturalLanguageCuration(
   "genres": ["장르명"],
   "mood": "분위기 설명",
   "section_title": "큐레이션 섹션 제목 (20자 이내)"
-}`,
-    }],
-  });
+}
+JSON만 반환하고 다른 텍스트는 포함하지 마세요.`);
 
   let intent = {
     search_text: prompt,
@@ -57,7 +52,8 @@ export async function processNaturalLanguageCuration(
   };
 
   try {
-    const jsonMatch = (intentResponse.content[0] as { type: string; text: string }).text.match(/\{[\s\S]*\}/);
+    const intentText = intentResult.response.text();
+    const jsonMatch = intentText.match(/\{[\s\S]*\}/);
     if (jsonMatch) intent = { ...intent, ...JSON.parse(jsonMatch[0]) };
   } catch {
     // JSON 파싱 실패 시 원본 텍스트 사용
@@ -107,25 +103,18 @@ export async function processNaturalLanguageCuration(
     LIMIT $${idx}
   `, values);
 
-  // 4. Claude로 큐레이션 이유 생성
+  // 4. Gemini로 큐레이션 이유 생성
   let aiReason = `"${prompt}"에 딱 맞는 콘텐츠를 찾았어요.`;
 
   if (contents.length > 0) {
     const titlesText = contents.slice(0, 3).map((c) => c.title_ko).join(', ');
 
-    const reasonResponse = await anthropic.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 150,
-      messages: [{
-        role: 'user',
-        content: `사용자가 "${prompt}"를 원합니다.
+    const reasonResult = await gemini.generateContent(`사용자가 "${prompt}"를 원합니다.
 추천한 콘텐츠: ${titlesText}
 
-이 추천에 대한 간단한 이유를 1-2문장의 친근한 한국어로 작성해주세요. 50자 이내.`,
-      }],
-    });
+이 추천에 대한 간단한 이유를 1-2문장의 친근한 한국어로 작성해주세요. 50자 이내.`);
 
-    aiReason = (reasonResponse.content[0] as { type: string; text: string }).text.trim();
+    aiReason = reasonResult.response.text().trim();
   }
 
   return {
@@ -187,16 +176,11 @@ async function computePersonalizedSectionsForUser(
 
   const contentIds = personalizedContents.map((c) => c.content_id);
 
-  // Claude로 섹션 제목 생성
-  const titleResponse = await anthropic.messages.create({
-    model: 'claude-haiku-4-5',
-    max_tokens: 50,
-    messages: [{
-      role: 'user',
-      content: '개인화 콘텐츠 추천 섹션의 제목을 한국어로 15자 이내로 만들어주세요. 예: "당신을 위한 오늘의 선택"',
-    }],
-  });
-  const sectionTitle = (titleResponse.content[0] as { text: string }).text.trim();
+  // Gemini로 섹션 제목 생성
+  const titleResult = await gemini.generateContent(
+    '개인화 콘텐츠 추천 섹션의 제목을 한국어로 15자 이내로 만들어주세요. 예: "당신을 위한 오늘의 선택". 제목만 반환하세요.'
+  );
+  const sectionTitle = titleResult.response.text().trim();
 
   // 기존 개인화 섹션 만료 처리
   await query(`
